@@ -6,73 +6,60 @@
 /*   By: jpedro-b <jpedro-b@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 12:20:10 by jpedro-b          #+#    #+#             */
-/*   Updated: 2025/04/29 18:15:00 by jpedro-b         ###   ########.fr       */
+/*   Updated: 2025/04/29 19:20:28 by jpedro-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
 static char g_last[BUFFER_SIZE + 1];
+static ssize_t bytes_read;
 static t_list *stash;
+static int i;
+static int j;
 
 char *get_next_line(int fd)
 {
-  if (stash)
+  i = 0;
+  j = 0;
+  bytes_read = -1;
+  while (bytes_read == -1 || bytes_read > 0)
   {
-    printf("STASH NOT EMPTY\n");
-    t_list *tmp;
-    int i = 0;
-    int j = 0;
-
-    tmp = stash;
-    while(tmp)
-    {
-      printf("Stash Content = %s\n\n", (char *)tmp->content);
-      if (ft_contains((char *)tmp->content, '\n') >= 0)
-      {
-        printf("Founded Content = %d\n\n", ft_contains((char *)tmp->content, '\n'));
-        i += ft_contains((char *)tmp->content, '\n');
-        return (cres_lst(stash, i, j));
-      }
-      else
-        i += ft_strlen((char *)tmp->content);
-    
-      tmp = tmp->next;
-      if (tmp && tmp->content)
-        j += 1;
-    }
-
-    printf("Res Length = %d/%d\n\n", i, j);
-  }
-  else
-    printf("STASH EMPTY\n");
-
-  ssize_t bytes_read = read(fd, g_last, BUFFER_SIZE);
-  if (bytes_read == -1)
-    printf("Error reading file\n");
-  else
-  {
-    g_last[bytes_read] = '\0';
-    printf("Last Content = %s\n\n", g_last);
-
-    //printf("Last = %s\n\n", g_last);
-
-    if(stash == NULL)
-    {
-
-      // if (ft_contains(g_last, '\n') >= 0)
-      //   return (cres_str(g_last, ft_contains(g_last, '\n')));
-      // else
-      printf("NEW NODE\n");
-      stash = ft_lstnew(g_last);
-    }
+    bytes_read = read(fd, g_last, BUFFER_SIZE);
+    if (bytes_read == -1)
+      return (NULL);
     else
     {
-      printf("NEW NODE TO BACK\n");
-      t_list	*new_node = ft_lstnew(g_last);
-      ft_lstadd_back(&stash, new_node);
+      g_last[bytes_read] = '\0';
+      printf("BT = %ld\nLast Content = %s\n\n", bytes_read, g_last);
+      
+      if (bytes_read > 0)
+      {
+        char *content_copy = malloc(bytes_read + 1);
+        if (!content_copy)
+          return (NULL);
+        ft_strlcpy(content_copy, g_last, bytes_read + 1);
+
+        if(stash == NULL)
+        {
+          printf("NEW NODE\n");
+          stash = ft_lstnew(content_copy);
+        }
+        else
+        {
+          printf("NEW NODE TO BACK\n");
+          t_list	*new_node = ft_lstnew(content_copy);
+          ft_lstadd_back(&stash, new_node);
+        }
+        
+        printf("CT = %d\n", ft_contains(g_last, '\n'));
+        i += ft_strlen(g_last);
+        j += 1;
+        if (ft_contains(g_last, '\n') > 0)
+          return (cres_lst(stash, i, j));
+      }
     }
   }
-  
+    
   return (NULL);
 }

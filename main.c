@@ -12,7 +12,6 @@ int main()
   {
     printf("Current FD = %d\n\n", myFile);
     printf("Returned Line = %s\n", get_next_line(myFile));
-    printf("Returned Line = %s\n", get_next_line(myFile));
   }
 
   close(myFile);
