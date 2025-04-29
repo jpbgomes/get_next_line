@@ -2,13 +2,17 @@
 
 int main()
 {
-  int myFile = open("teste.txt", O_RDONLY);
+  printf("BUFFER_SIZE = %d\n", BUFFER_SIZE);
+
+  // int myFile = open("teste.txt", O_RDONLY);
+  int myFile = open("teste2.txt", O_RDONLY);
   if (myFile == -1)
     printf("NO FILE\n");
   else
   {
-    printf("YES FILE\n");
-    printf("Current Line = %s\n", get_next_line(myFile));
+    printf("Current FD = %d\n\n", myFile);
+    printf("Returned Line = %s\n", get_next_line(myFile));
+    printf("Returned Line = %s\n", get_next_line(myFile));
   }
 
   close(myFile);

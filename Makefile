@@ -4,7 +4,7 @@ BUFFER_SIZE ?= 42
 BUFFER_DEF = -D BUFFER_SIZE=$(BUFFER_SIZE)
 FLAGS = -Wall -Wextra -Werror $(BUFFER_DEF)
 
-SRCFILES = get_next_line.c
+SRCFILES = get_next_line.c get_next_line_utils.c
 OBJFILES = $(SRCFILES:.c=.o)
 
 .PHONY: all clean fclean re test
