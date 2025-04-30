@@ -6,7 +6,7 @@
 /*   By: jpedro-b <jpedro-b@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 12:20:37 by jpedro-b          #+#    #+#             */
-/*   Updated: 2025/04/29 19:29:48 by jpedro-b         ###   ########.fr       */
+/*   Updated: 2025/04/30 16:29:54 by jpedro-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,42 +82,95 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 	return (src_l);
 }
 
-void  ft_strfill(char *res, char *content, int start)
+int	ft_calculatelen(t_list *lst)
 {
-	size_t	i;
-
-	i = 0;
-	while (i < ft_strlen(content))
-	{
-		// printf("L = %c|Pos I = %ld\n",  content[i], i);
-		res[start + i] = content[i];
-		i++;
-	}
-}
-
-char  *cres_lst(t_list *lst, int i, int j)
-{
-	char	*res;
+	int	len;
+	int	i;
+	char	*content;
 	t_list	*tmp;
-	int	c;
 
-	printf("I = %d\nJ = %d\n", i, j);
-
+	len = 0;
+	i = 0;
 	if (lst)
 	{
-		res = malloc(i * sizeof(char));
-		if (!res)
-			return (NULL);
-
-		c = 0;
 		tmp = lst;
 		while (tmp)
 		{
-			ft_strfill(res, (char *)tmp->content, c);
-			c += ft_strlen(tmp->content);
-			printf("Content = %s\n", (char *)tmp->content);
+			content = (char *)tmp->content;
+
+			i = 0;
+			while (content[i] != '\0')
+			{
+				if (content[i] == '\n')
+				{
+					len += i;
+					return (len);
+				}
+				else
+					i++;
+			}
+			len += i;
 			tmp = tmp->next;
 		}
 	}
+	return (len);
+}
+
+char  *cres_lst(t_list *lst)
+{
+	char	*res;
+	t_list	*tmp;
+	int	total_len;
+	int lst_nbr;
+	int c;
+	int i;
+	char	*content;
+
+	total_len = ft_calculatelen(lst);
+	printf("Total Len Res = %d\n", total_len);
+
+	c = 0;
+	lst_nbr = 0;
+	if (lst)
+	{
+		res = malloc(total_len * sizeof(char));
+		if (!res)
+			return (NULL);
+
+		tmp = lst;
+		while (tmp)
+		{
+			i = 0;
+			content = (char *)tmp->content;
+			printf("Content = %s\n", content);
+
+			while (content[i] && c < total_len)
+			{
+				// printf("C = %d | I = %d | N = %c\n", c, i, content[i]);
+				
+				res[c] = content[i];
+				i++;
+				c++;
+			}
+
+			if (ft_contains(content, '\n') > 0 && ft_contains(content, '\n') < (int)ft_strlen(content) - 1)
+			{
+				printf("NOT END New Line = %d | TL - %ld\n", ft_contains(content, '\n'), ft_strlen(content));
+				// content += ((int)ft_strlen(content) - ft_contains(content, '\n')); 
+				tmp->content += 1 + ft_contains(content, '\n');
+				// printf("Content2 = %s\n", content);
+			}
+			else if (ft_contains(content, '\n') > 0 && ft_contains(content, '\n') == (int)ft_strlen(content) - 1)
+			{
+				printf("END New Line = %d | TL - %ld\n", ft_contains(content, '\n'), ft_strlen(content));
+			}
+
+			tmp = tmp->next;
+			lst_nbr++;
+		}
+	}
+
+	res[c] = '\n';
+
   return (res);
 }

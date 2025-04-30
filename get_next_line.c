@@ -6,7 +6,7 @@
 /*   By: jpedro-b <jpedro-b@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 12:20:10 by jpedro-b          #+#    #+#             */
-/*   Updated: 2025/04/29 19:20:28 by jpedro-b         ###   ########.fr       */
+/*   Updated: 2025/04/30 16:26:44 by jpedro-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,29 @@
 static char g_last[BUFFER_SIZE + 1];
 static ssize_t bytes_read;
 static t_list *stash;
-static int i;
-static int j;
 
 char *get_next_line(int fd)
 {
-  i = 0;
-  j = 0;
+	char	*content;
+	t_list	*tmp;
+  
+  if (stash)
+	{
+    printf("Stash = %p\n", stash);
+		tmp = stash;
+		while (tmp)
+		{
+			content = (char *)tmp->content;
+      printf("OLD CONTENT = %s\n", content);
+      if (ft_contains(content, '\n') > 0)
+      {
+        return (cres_lst(stash));
+      }
+
+			tmp = tmp->next;
+		}
+	}
+  
   bytes_read = -1;
   while (bytes_read == -1 || bytes_read > 0)
   {
@@ -31,7 +47,7 @@ char *get_next_line(int fd)
     else
     {
       g_last[bytes_read] = '\0';
-      printf("BT = %ld\nLast Content = %s\n\n", bytes_read, g_last);
+      // printf("BT = %ld\nLast Content = %s\n", bytes_read, g_last);
       
       if (bytes_read > 0)
       {
@@ -42,21 +58,18 @@ char *get_next_line(int fd)
 
         if(stash == NULL)
         {
-          printf("NEW NODE\n");
+          // printf("NEW NODE\n\n");
           stash = ft_lstnew(content_copy);
         }
         else
         {
-          printf("NEW NODE TO BACK\n");
+          // printf("NEW NODE TO BACK\n\n");
           t_list	*new_node = ft_lstnew(content_copy);
           ft_lstadd_back(&stash, new_node);
         }
         
-        printf("CT = %d\n", ft_contains(g_last, '\n'));
-        i += ft_strlen(g_last);
-        j += 1;
         if (ft_contains(g_last, '\n') > 0)
-          return (cres_lst(stash, i, j));
+          return (cres_lst(stash));
       }
     }
   }

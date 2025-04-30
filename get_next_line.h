@@ -6,7 +6,7 @@
 /*   By: jpedro-b <jpedro-b@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 12:20:34 by jpedro-b          #+#    #+#             */
-/*   Updated: 2025/04/29 19:27:04 by jpedro-b         ###   ########.fr       */
+/*   Updated: 2025/04/30 12:38:35 by jpedro-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
   size_t	ft_strlen(const char *s);
   size_t	ft_strlcpy(char *dst, const char *src, size_t size);
   void  ft_strfill(char *res, char *content, int start);
-  char  *cres_lst(t_list *lst, int i, int j);
+  char  *cres_lst(t_list *lst);
 #endif
 
 #ifndef BUFFER_SIZE
