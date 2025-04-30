@@ -6,7 +6,7 @@
 /*   By: jpedro-b <jpedro-b@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 12:20:37 by jpedro-b          #+#    #+#             */
-/*   Updated: 2025/04/30 16:29:54 by jpedro-b         ###   ########.fr       */
+/*   Updated: 2025/04/30 17:11:48 by jpedro-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,61 +116,83 @@ int	ft_calculatelen(t_list *lst)
 	return (len);
 }
 
-char  *cres_lst(t_list *lst)
+void ft_freenodes(t_list **stash, int nbr)
 {
-	char	*res;
 	t_list	*tmp;
-	int	total_len;
-	int lst_nbr;
-	int c;
+	t_list	*to_free;
 	int i;
-	char	*content;
 
-	total_len = ft_calculatelen(lst);
-	printf("Total Len Res = %d\n", total_len);
-
-	c = 0;
-	lst_nbr = 0;
-	if (lst)
+	i = 0;
+	tmp = *stash;
+	while (tmp && i < nbr)
 	{
-		res = malloc(total_len * sizeof(char));
-		if (!res)
-			return (NULL);
+		// printf("Nbr = %d | Content = %s\n", nbr, (char *)tmp->content);
 
-		tmp = lst;
-		while (tmp)
-		{
-			i = 0;
-			content = (char *)tmp->content;
-			printf("Content = %s\n", content);
-
-			while (content[i] && c < total_len)
-			{
-				// printf("C = %d | I = %d | N = %c\n", c, i, content[i]);
-				
-				res[c] = content[i];
-				i++;
-				c++;
-			}
-
-			if (ft_contains(content, '\n') > 0 && ft_contains(content, '\n') < (int)ft_strlen(content) - 1)
-			{
-				printf("NOT END New Line = %d | TL - %ld\n", ft_contains(content, '\n'), ft_strlen(content));
-				// content += ((int)ft_strlen(content) - ft_contains(content, '\n')); 
-				tmp->content += 1 + ft_contains(content, '\n');
-				// printf("Content2 = %s\n", content);
-			}
-			else if (ft_contains(content, '\n') > 0 && ft_contains(content, '\n') == (int)ft_strlen(content) - 1)
-			{
-				printf("END New Line = %d | TL - %ld\n", ft_contains(content, '\n'), ft_strlen(content));
-			}
-
-			tmp = tmp->next;
-			lst_nbr++;
-		}
+		to_free = tmp;
+		tmp = tmp->next;
+		free(to_free);
+		i++;
 	}
 
-	res[c] = '\n';
+	*stash = tmp;
+}
 
-  return (res);
+char *cres_lst(t_list **stash)
+{
+	char    *res;
+	t_list  *tmp;
+	int     total_len;
+	int     c;
+	int     i;
+	int	nbr;
+	char    *content;
+
+	total_len = ft_calculatelen(*stash);
+	// printf("Total Len Res = %d\n", total_len);
+
+	c = 0;
+	if (!*stash)
+		return (NULL);
+
+	res = malloc(total_len * sizeof(char));
+	if (!res)
+		return (NULL);
+
+	tmp = *stash;
+	while (tmp)
+	{
+		i = 0;
+		content = (char *)tmp->content;
+		// printf("Content = %s\n", content);
+
+		while (content[i] && c < total_len)
+		{
+			res[c] = content[i];
+			i++;
+			c++;
+		}
+
+		if (ft_contains(content, '\n') > 0 && ft_contains(content, '\n') < (int)ft_strlen(content) - 1)
+		{
+			// printf("NOT END New Line = %d | TL - %ld\n", ft_contains(content, '\n'), ft_strlen(content));
+			ft_freenodes(stash, nbr);
+			tmp->content += ft_contains(content, '\n') + 1;
+		}
+		else if (ft_contains(content, '\n') > 0 && ft_contains(content, '\n') == (int)ft_strlen(content) - 1)
+		{
+			// printf("END New Line = %d | TL - %ld\n", ft_contains(content, '\n'), ft_strlen(content));
+			ft_freenodes(stash, nbr);
+			t_list *to_free = tmp;
+			tmp = tmp->next;
+			free(to_free);
+			*stash = tmp;
+			break;
+		}
+
+		tmp = tmp->next;
+		nbr++;
+	}
+
+	res[c] = '\0';
+	return (res);
 }

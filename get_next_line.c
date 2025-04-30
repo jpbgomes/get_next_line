@@ -6,7 +6,7 @@
 /*   By: jpedro-b <jpedro-b@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 12:20:10 by jpedro-b          #+#    #+#             */
-/*   Updated: 2025/04/30 16:26:44 by jpedro-b         ###   ########.fr       */
+/*   Updated: 2025/04/30 17:11:38 by jpedro-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,15 @@ char *get_next_line(int fd)
   
   if (stash)
 	{
-    printf("Stash = %p\n", stash);
+    // printf("Stash = %p\n", stash);
 		tmp = stash;
 		while (tmp)
 		{
 			content = (char *)tmp->content;
-      printf("OLD CONTENT = %s\n", content);
+      // printf("OLD CONTENT = %s\n", content);
       if (ft_contains(content, '\n') > 0)
       {
-        return (cres_lst(stash));
+        return (cres_lst(&stash));
       }
 
 			tmp = tmp->next;
@@ -69,7 +69,7 @@ char *get_next_line(int fd)
         }
         
         if (ft_contains(g_last, '\n') > 0)
-          return (cres_lst(stash));
+          return (cres_lst(&stash));
       }
     }
   }

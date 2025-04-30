@@ -12,9 +12,11 @@ int main()
     printf("NO FILE\n");
   else
   {
-    printf("Current FD = %d\n\n", myFile);
+    // printf("Current FD = %d\n\n", myFile);
     printf("Returned Line = %s\n", get_next_line(myFile));
-    printf("\n\nCurrent FD = %d\n\n", myFile);
+    // printf("\n\nCurrent FD = %d\n\n", myFile);
+    printf("Returned Line = %s\n", get_next_line(myFile));
+    // printf("\n\nCurrent FD = %d\n\n", myFile);
     printf("Returned Line = %s\n", get_next_line(myFile));
   }
 
