@@ -6,7 +6,7 @@
 /*   By: jpedro-b <jpedro-b@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 12:20:37 by jpedro-b          #+#    #+#             */
-/*   Updated: 2025/04/30 17:11:48 by jpedro-b         ###   ########.fr       */
+/*   Updated: 2025/05/02 16:50:10 by jpedro-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,6 +150,7 @@ char *cres_lst(t_list **stash)
 	total_len = ft_calculatelen(*stash);
 	// printf("Total Len Res = %d\n", total_len);
 
+	nbr = 0;
 	c = 0;
 	if (!*stash)
 		return (NULL);

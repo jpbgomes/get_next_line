@@ -7,7 +7,8 @@ int main()
   // int myFile = open("teste.txt", O_RDONLY);
   // int myFile = open("teste2.txt", O_RDONLY);
   // int myFile = open("teste3.txt", O_RDONLY);
-  int myFile = open("teste4.txt", O_RDONLY);
+  // int myFile = open("teste4.txt", O_RDONLY);
+  int myFile = open("teste5.txt", O_RDONLY);
   if (myFile == -1)
     printf("NO FILE\n");
   else
